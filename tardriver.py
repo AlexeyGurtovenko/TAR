@@ -11,8 +11,8 @@ class TarDriver:
 
     #Конструктор класса
     def __init__(self, 
-                        trello_apiKey = '503d846bca7ae5bb0e72fa6cb3a3ca31',                                 #apiKey для подключения к trello
-                        trello_token = 'cc9088fe03d79900addf358096d108977d7dfc346e39b88d916ea405a6bf5a91',  #apiToken для подключения к trello
+                        trello_apiKey = '',                                 #apiKey для подключения к trello
+                        trello_token = '',  #apiToken для подключения к trello
                         local_timezone = 'Asia/Tomsk'): 
 
 
