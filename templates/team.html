@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %} Команда {% endblock %}
+
+{% block content %}
+    <br>
+      <div class="row">
+        <div class="col-5">
+          <div class="list-group" id="list-tab" role="tablist">
+
+            {% for member in tar_driver.local_persons.all() %}
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-{{member['person_fullname'].translate(remove)}}-list" data-toggle="list" href="#list-{{member['person_fullname'].translate(remove)}}" role="tab" aria-controls="{{member['person_fullname'].translate(remove)}}">{{member['person_fullname']}}
+                <span class="badge badge-primary badge-pill "> {{tar_driver.get_persons_active_tasks(person_id = member['person_id'])}} зад. в работе </span>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="tab-content" id="nav-tabContent">
+            {% for member in tar_driver.local_persons.all() %}
+              <div class="tab-pane fade" id="list-{{member['person_fullname'].translate(remove)}}" role="tabpanel" aria-labelledby="list-{{member['person_fullname'].translate(remove)}}-list">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"> <h3> {{member['person_fullname']}} ({{(member['status']).lower()}})</h3></li>
+                  <li class="list-group-item"> <h6> Задачи:  </h6>  
+                    <div class="row">
+                      <div class="col-12">
+                        <ul class="list-group">
+                          {% for task in tar_driver.get_active_tasks_by_person(person_id = member['person_id']) %}
+                              <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <h6>{{task['board_name']}}</h6> {{task['card_name']}}
+                              </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item"> <h6> Техника:  </h6>  </li>
+                </ul>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+{% endblock %}

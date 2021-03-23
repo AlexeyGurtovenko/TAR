@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %} Проекты {% endblock %}
+
+{% block content %}
+    <br>
+      <div class="row">
+        <div class="col-4">
+          <div class="list-group" id="list-tab" role="tablist">
+
+            {% for board in tar_driver.local_boards.all() %}
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-{{board['board_name'].translate(remove)}}-list" data-toggle="list" href="#list-{{board['board_name'].translate(remove)}}" role="tab" aria-controls="{{board['board_name'].translate(remove)}}">{{board['board_name']}}
+                <span class="badge badge-primary badge-pill "> К: {{tar_driver.get_curr_stage_percent(board_id = board['board_id'], board_template = tar_driver.basic_template)}} %</span>
+              </a>
+            {% endfor %}
+            <a class="list-group-item list-group-item-action d-flex justify-content-center align-items-center" id="list-create-new-project-list" data-toggle="list" href="#list-create-new-project" role="tab" aria-controls="create-new-project"> Новый проект
+            </a>
+          </div>
+        </div>
+        <div class="col-8">
+          <div class="tab-content" id="nav-tabContent">
+            {% for board in tar_driver.local_boards.all() %}
+              <div class="tab-pane fade" id="list-{{board['board_name'].translate(remove)}}" role="tabpanel" aria-labelledby="list-{{board['board_name'].translate(remove)}}-list">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"> <h3> {{board['board_name']}} </h3></li>
+                    <div class="row">
+                      <div class="col-7">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item"> <h6> Активные задачи </h6> </li>
+                        </ul>
+                        <ul class="list-group">
+                          {% for task in tar_driver.get_tasks_on_board(board_id = board['board_id'], list_name = 'В Работе') %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              {{task['task_name']}} <i>{{task['task_member']}}</i>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item"> <h6> На согласовании </h6> </li>
+                        </ul>
+                        <ul class="list-group">
+                          {% for task in tar_driver.get_tasks_on_board(board_id = board['board_id'], list_name = 'Согласование Выполнения') %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              {{task['task_name']}} <i>{{task['task_member']}}</i>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      <div class="col-5">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item"> <h6> Участники  </h6> </li>
+                          {% for member in tar_driver.get_project_members(board['board_id']) %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              {{member['person_name']}}
+                              <span class="badge badge-primary badge-pill"> {{tar_driver.get_persons_active_tasks(member['person_id'])}} зад. в работе </span>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                        <ul class="list-group">
+
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            {% endfor %}
+            
+            <div class="tab-pane fade" id="list-create-new-project" role="tabpanel" aria-labelledby="list-create-new-project-list">
+              <form action="#" method="post">
+                <label for="formGroupExampleInput"> Создание нового проекта </label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-default"> Наименование </span>
+                  </div>
+                  <input type="text" name="project_name" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default"> Описание </span>
+                  </div>
+                  <input type="text" name="project_description" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+                <button type="submit" value="submit" class="btn btn-primary"> Создать </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+{% endblock %}
